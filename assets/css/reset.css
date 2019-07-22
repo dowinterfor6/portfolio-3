@@ -58,6 +58,7 @@ table {
 h1, h2, h3, h4, h5
 {
   font-family: 'Roboto', sans-serif;
+  font-weight: 100;
 }
 
 h1
@@ -85,8 +86,15 @@ h5
   font-size: 28px;
 }
 
-a, p, label
+a, p
 {
   font-family: 'Roboto Slab', serif; 
   font-size: 24px;
+  font-weight: 100;
+}
+
+label
+{
+	font-family: 'Jacques Francois Shadow', cursive;
+	font-size: 36px;
 }
