@@ -1,0 +1,29 @@
+{
+  "name": "portfolio3",
+  "version": "1.0.0",
+  "description": "Portfolio-3",
+  "main": "index.js",
+  "scripts": {
+    "webpack": "webpack --watch --mode=development",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dowinterfor6/portfolio-3.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dowinterfor6/portfolio-3/issues"
+  },
+  "homepage": "https://github.com/dowinterfor6/portfolio-3#readme",
+  "dependencies": {
+    "webpack": "^4.31.0",
+    "webpack-cli": "^3.3.2"
+  },
+  "engines": {
+    "node": "8.10.0",
+    "npm": "3.10.10"
+  }
+}

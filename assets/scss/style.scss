@@ -1,3 +1,5 @@
+$ocean-blue: #0077be;
+
 body 
 {
   margin: 0;
@@ -10,4 +12,9 @@ section
 {
   box-sizing: border-box;
   height: 100vh;
+}
+
+main
+{
+  background-color: $ocean-blue;
 }
