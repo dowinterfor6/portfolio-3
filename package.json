@@ -4,8 +4,7 @@
   "description": "Portfolio-3",
   "main": "index.js",
   "scripts": {
-    "webpack": "webpack --watch --mode=development",
-    "start": "node server.js"
+    "webpack": "webpack --watch --mode=development"
   },
   "repository": {
     "type": "git",
