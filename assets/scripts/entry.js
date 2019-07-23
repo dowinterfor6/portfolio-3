@@ -6,6 +6,4 @@ document.addEventListener('DOMContentLoaded', () => {
   skyCanvas.style.height = "100vh";
   skyCanvas.style.width = "100%";
   new Sky(skyCanvas);
-
-  
 })

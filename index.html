@@ -9,26 +9,34 @@
   <link rel="stylesheet" href="./assets/css/reset.css">
   <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:100,300,400|Roboto:100,300,400,500|Jacques+Francois+Shadow&display=swap" rel="stylesheet"> 
   <script src="./bundle.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="./assets/scripts/scroll.js"></script>
 </head>
 <body>
   <!-- https://www.sitepoint.com/8-tips-help-get-best-sass/ -->
   <!-- SASS Notes: -->
   <!-- sass --watch .\assets\scss\:.\assets\css\ -->
   <!-- sass .\assets\scss\style.scss .\assets\css\style.css --style=compressed -->
-  <main>
+  <main id='surface'>
     <!-- <h1>Andrew Chan</h1> -->
 
     <!-- Background/Clouds -->
     <!-- Background/Tree/Mountains -->
     <canvas id='skyCanvas'></canvas>
+    <aside id='upperContent'>
+      <a href='#water'>
+        <div id='line'></div>
+      </a>
+    </aside>
     <!-- Canvas/Sky -->
     <!-- Canvas/Rays -->
     <!-- Canvas/Ocean -->
     <!-- Foreground with fishing rod -->
   </main>
-  <section>
+  <section id='water'>
     <h2>Ocean section</h2>
     <label>There's plenty of fish in the sea</label>
+    <a href='#surface'>Bring me back up!</a>
   </section>
 </body>
 </html>

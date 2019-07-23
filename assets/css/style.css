@@ -5,13 +5,31 @@ body {
 }
 
 main,
-section {
+section,
+#upperContent {
   box-sizing: border-box;
   height: 100vh;
 }
 
-main {
-  border: 1px solid red;
+#upperContent {
+  border: 1px solid blue;
+  display: flex;
+  position: absolute;
+  width: 100%;
+  top: 0;
+}
+#upperContent #line {
+  position: absolute;
+  bottom: 0;
+  left: 25%;
+  box-sizing: border-box;
+  border: 1px solid black;
+  width: 10px;
+  height: 150px;
+  background: black;
+}
+#upperContent #line:hover {
+  cursor: pointer;
 }
 
 /*# sourceMappingURL=style.css.map */
