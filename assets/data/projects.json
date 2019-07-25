@@ -1,0 +1,18 @@
+{
+  "Flappybara": {
+    "description": "Inspired by the popular Flappy Bird game, Flappybara recreates the charm and follows the flying adventures of a capybara.",
+    "technologies": ["C#", "Unity3D", "Firebase", "Android App Bundle"]
+  },
+  "Go-chella": {
+    "description": "An event planning web app to help organizers plan out a day of acts for their group. Formerly \"Brochella\".",
+    "technologies": ["JavaScript ES6", "MongoDB", "Express", "React.js", "Redux", "Node.js"]
+  },
+  "Discourse": {
+    "description": "A platform for live text chat in private, invite-only servers via URL invite links, inspired by Discord.",
+    "technologies": ["React.js", "Redux", "Ruby", "Ruby on Rails", "Action Cable (websockets)", "PostgreSQL", "AJAX", "Moment.js"]
+  },
+  "Shadow fight": {
+    "description": "A fighting game inspired by Tekken and Street Fighter, with a backdrop of falling sakura petals or snow",
+    "technologies": ["JavaScript ES6", "HTML5 Canvas"]
+  }
+}

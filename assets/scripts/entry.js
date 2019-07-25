@@ -1,5 +1,7 @@
 import Sky from './sky';
-import Cooler from './cooler';
+import createBeer from './cooler';
+
+const projects = require('../data/projects.json');
 
 document.addEventListener('DOMContentLoaded', () => {
   console.log('DOM Content Loaded');
@@ -8,8 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
   skyCanvas.style.width = "100%";
   new Sky(skyCanvas);
 
-  const coolerCanvas = document.getElementById('coolerCanvas');
-  coolerCanvas.style.height = "100px";
-  coolerCanvas.style.width = "200px";
-  new Cooler(coolerCanvas);
+  const coolerElement = document.getElementById('cooler');
+  createBeer(coolerElement, projects);
 })
