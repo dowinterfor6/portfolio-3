@@ -11,7 +11,7 @@
     "description": "A platform for live text chat in private, invite-only servers via URL invite links, inspired by Discord.",
     "technologies": ["React.js", "Redux", "Ruby", "Ruby on Rails", "Action Cable (websockets)", "PostgreSQL", "AJAX", "Moment.js"]
   },
-  "Shadow fight": {
+  "Shadow-fight": {
     "description": "A fighting game inspired by Tekken and Street Fighter, with a backdrop of falling sakura petals or snow",
     "technologies": ["JavaScript ES6", "HTML5 Canvas"]
   }
