@@ -1,5 +1,6 @@
 import Sky from './sky';
 import createBeer from './cooler';
+import test from './threeTest';
 
 const projects = require('../data/projects.json');
 
@@ -12,4 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const coolerElement = document.getElementById('cooler');
   createBeer(coolerElement, projects);
+
+  test();
 })
