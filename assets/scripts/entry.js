@@ -1,6 +1,5 @@
 import Sky from './sky';
-import createBeer from './cooler';
-import test from './threeTest';
+import Cooler from './cooler';
 
 const projects = require('../data/projects.json');
 
@@ -12,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
   new Sky(skyCanvas);
 
   const coolerElement = document.getElementById('cooler');
-  createBeer(coolerElement, projects);
-
-  test();
+  coolerElement.style.height = "200px";
+  coolerElement.style.width = "400px";
+  const coolerCanvas = new Cooler(coolerElement);
 })
