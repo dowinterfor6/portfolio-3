@@ -1,13 +1,20 @@
 import * as THREE from 'three';
+import WEBGL from './webGL';
 
 export default class MainCanvas {
   constructor(canvas) {
     this.animate = this.animate.bind(this);
     this.resizeRendererToDisplaySize = this.resizeRendererToDisplaySize.bind(this);
+
+    if (WEBGL.isWebGLAvailable()) {
+      this.createScene(canvas);
+      this.addCube();
+      this.animate();
+    } else {
+      const warning = WEBGL.getWebGLErrorMessage();
+      document.getElementById('error-container').appendChild(warning);
+    }
     
-    this.createScene(canvas);
-    this.addCube();
-    this.animate();
   }
 
   createScene(canvas) {
