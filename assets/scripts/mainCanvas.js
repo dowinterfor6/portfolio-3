@@ -4,6 +4,9 @@ import WEBGL from './webGL';
 // https://www.pericror.com/software/creating-3d-objects-with-click-handlers-using-three-js/
 // Click handler using raycasting
 
+// https://github.com/mrdoob/three.js/blob/master/examples/webgl_lights_hemisphere.html
+// Reference example
+
 export default class MainCanvas {
   constructor(canvas) {
     this.animate = this.animate.bind(this);
