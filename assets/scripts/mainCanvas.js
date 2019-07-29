@@ -1,6 +1,9 @@
 import * as THREE from 'three';
 import WEBGL from './webGL';
 
+// https://www.pericror.com/software/creating-3d-objects-with-click-handlers-using-three-js/
+// Click handler using raycasting
+
 export default class MainCanvas {
   constructor(canvas) {
     this.animate = this.animate.bind(this);
@@ -10,6 +13,10 @@ export default class MainCanvas {
       this.createScene(canvas);
       this.addCube();
       this.addLine();
+      this.addLight();
+      this.addPlane();
+      this.addAxes();
+
       this.animate();
     } else {
       const warning = WEBGL.getWebGLErrorMessage();
@@ -35,7 +42,7 @@ export default class MainCanvas {
 
   addCube() {
     const geometry = new THREE.BoxGeometry(1, 1, 1);
-    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    const material = new THREE.MeshToonMaterial({ color: 0x00ff00 });
 
     this.cube = new THREE.Mesh(geometry, material);
 
@@ -54,6 +61,32 @@ export default class MainCanvas {
     this.scene.add(line);
   }
 
+  addLight() {
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.75);
+    // const ambientLight = new THREE.AmbientLight(0xffffff);
+
+    directionalLight.position.set(0, 1, 0);
+    this.scene.add(directionalLight);
+    // this.scene.add(ambientLight);
+  }
+
+  addPlane() {
+    const material = new THREE.MeshToonMaterial({ color: 0xff0000, side: THREE.DoubleSide });
+    const geometry = new THREE.PlaneGeometry(this.renderer.domElement.clientWidth, 4);
+    this.plane = new THREE.Mesh(geometry, material);
+
+    this.plane.position.set(0, -2, 0);
+    this.plane.rotation.x = Math.PI / 2;
+
+    this.scene.add(this.plane);
+  }
+
+  addAxes() {
+    const axesHelper = new THREE.AxesHelper(5);
+
+    this.scene.add(axesHelper);
+  }
+
   animate(time) {
     time *= 0.001;
     
@@ -65,6 +98,11 @@ export default class MainCanvas {
 
     this.cube.rotation.x = time;
     this.cube.rotation.y = time;
+
+    // this.plane.rotation.y = time;
+    // this.plane.rotation.x = time;
+
+    // this.camera.position.set(0, -time, 15);
 
     this.renderer.render(this.scene, this.camera);
     
