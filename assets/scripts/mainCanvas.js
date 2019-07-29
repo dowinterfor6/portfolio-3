@@ -9,6 +9,7 @@ export default class MainCanvas {
     if (WEBGL.isWebGLAvailable()) {
       this.createScene(canvas);
       this.addCube();
+      this.addLine();
       this.animate();
     } else {
       const warning = WEBGL.getWebGLErrorMessage();
@@ -22,24 +23,35 @@ export default class MainCanvas {
     const fov = 75; //degrees vertical
     const aspect = window.innerWidth / window.innerHeight;
     const near = 0.1;
-    const far = 10;
+    const far = 100;
     this.camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
 
     this.renderer = new THREE.WebGLRenderer({canvas});
-    // this.renderer.setSize(
-    //   window.innerWidth, window.innerHeight
-    // );
     document.body.appendChild(this.renderer.domElement);
     
+    this.camera.position.set(0, 0, 15);
+    this.camera.lookAt(0, 0, 0);
   }
 
   addCube() {
     const geometry = new THREE.BoxGeometry(1, 1, 1);
     const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-    this.cube = new THREE.Mesh(geometry, material);
-    this.scene.add(this.cube);
 
-    this.camera.position.z = 5;
+    this.cube = new THREE.Mesh(geometry, material);
+
+    this.scene.add(this.cube);
+  }
+
+  addLine() {
+    const material = new THREE.LineBasicMaterial({ color: 0x0000ff });
+    const geometry = new THREE.Geometry();
+    geometry.vertices.push(new THREE.Vector3(-10, 0, 0));
+    geometry.vertices.push(new THREE.Vector3(0, 10, 0));
+    geometry.vertices.push(new THREE.Vector3(10, 0, 0));
+
+    const line = new THREE.Line(geometry, material);
+
+    this.scene.add(line);
   }
 
   animate(time) {
