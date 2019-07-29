@@ -1,3 +1,5 @@
+const THREE = require('three');
+
 export default class MainCanvas {
   constructor(canvas) {
     this.animate = this.animate.bind(this);
