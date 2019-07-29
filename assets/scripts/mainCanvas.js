@@ -27,16 +27,19 @@ export default class MainCanvas {
 
   createScene(canvas) {
     this.scene = new THREE.Scene();
-    const fov = 75; //degrees vertical
+    this.scene.background = new THREE.Color().setHSL(0.6, 0, 1);
+    this.scene.fog = new THREE.Fog(this.scene.background, 1, 5000);
+
+    const fov = 30; //degrees vertical
     const aspect = window.innerWidth / window.innerHeight;
-    const near = 0.1;
-    const far = 100;
+    const near = 1;
+    const far = 5000;
     this.camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
 
     this.renderer = new THREE.WebGLRenderer({canvas});
     document.body.appendChild(this.renderer.domElement);
     
-    this.camera.position.set(0, 0, 15);
+    this.camera.position.set(0, 0, 250);
     this.camera.lookAt(0, 0, 0);
   }
 
@@ -62,23 +65,31 @@ export default class MainCanvas {
   }
 
   addLight() {
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.75);
-    // const ambientLight = new THREE.AmbientLight(0xffffff);
-
-    directionalLight.position.set(0, 1, 0);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    directionalLight.position.set(-1, 1.75, 1);
+    directionalLight.position.multiplyScalar(30);
     this.scene.add(directionalLight);
-    // this.scene.add(ambientLight);
   }
 
   addPlane() {
-    const material = new THREE.MeshToonMaterial({ color: 0xff0000, side: THREE.DoubleSide });
-    const geometry = new THREE.PlaneGeometry(this.renderer.domElement.clientWidth, 4);
-    this.plane = new THREE.Mesh(geometry, material);
+    // const material = new THREE.MeshToonMaterial({ color: 0x00ff00, side: THREE.DoubleSide });
+    // const geometry = new THREE.PlaneGeometry(this.renderer.domElement.clientWidth, 4);
+    // this.plane = new THREE.Mesh(geometry, material);
 
-    this.plane.position.set(0, -2, 0);
-    this.plane.rotation.x = Math.PI / 2;
+    // this.plane.position.set(0, -8, 0);
+    // this.plane.rotation.x = Math.PI / 2;
 
-    this.scene.add(this.plane);
+    // this.scene.add(this.plane);
+
+    const geometry = new THREE.PlaneBufferGeometry(10000, 10000);
+    const material = new THREE.MeshLambertMaterial({ color: 0xffffff });
+    material.color.setHSL(0.095, 1, 0.75);
+
+    const ground = new THREE.Mesh(geometry, material);
+    ground.position.y = -33;
+    ground.rotation.x = - Math.PI / 2;
+    ground.receiveShadow = true;
+    this.scene.add(ground);
   }
 
   addAxes() {
@@ -103,6 +114,9 @@ export default class MainCanvas {
     // this.plane.rotation.x = time;
 
     // this.camera.position.set(0, -time, 15);
+
+    // this.sphere1.rotation.y = time;
+    // this.sphere1.rotation.x = time;
 
     this.renderer.render(this.scene, this.camera);
     
