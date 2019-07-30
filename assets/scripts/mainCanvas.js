@@ -14,11 +14,11 @@ export default class MainCanvas {
 
     if (WEBGL.isWebGLAvailable()) {
       this.createScene(canvas);
-      this.addCube();
-      this.addLine();
+      // this.addCube();
+      // this.addLine();
       this.addLight();
       this.addPlane();
-      this.addAxes();
+      // this.addAxes();
 
       this.animate();
     } else {
@@ -68,22 +68,61 @@ export default class MainCanvas {
   }
 
   addLight() {
+    const hemisphereLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.6);
+    hemisphereLight.color.setHSL(0.6, 1, 0.6);
+    hemisphereLight.groundColor.setHSL(0.095, 1, 0.75);
+    hemisphereLight.position.set(0, 50, 0);
+    this.scene.add(hemisphereLight);
+
+    const hemisphereLightHelper = new THREE.HemisphereLightHelper(hemisphereLight, 10);
+    this.scene.add(hemisphereLightHelper);
+
     const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
     directionalLight.position.set(-1, 1.75, 1);
     directionalLight.position.multiplyScalar(30);
     this.scene.add(directionalLight);
+
+    directionalLight.castShadow = true;
+
+    directionalLight.shadow.mapSize.width = 2048;
+    directionalLight.shadow.mapSize.height = 2048;
+
+    const d = 50;
+    directionalLight.shadow.left = -d;
+    directionalLight.shadow.right = d;
+    directionalLight.shadow.top = d;
+    directionalLight.shadow.bottom = -d;
+
+    directionalLight.shadow.camera.far = 3500;
+    directionalLight.shadow.bias = -0.0001;
+
+    const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight, 10);
+    this.scene.add(directionalLightHelper);
+
+    // Sky
+
+    const vertexShader = document.getElementById( 'vertexShader' ).textContent;
+    const fragmentShader = document.getElementById( 'fragmentShader' ).textContent;
+    const uniforms = {
+      "topColor": { value: new THREE.Color( 0x0077ff ) },
+      "bottomColor": { value: new THREE.Color( 0xffffff ) },
+      "offset": { value: 33 },
+      "exponent": { value: 0.6 }
+    };
+    uniforms[ "topColor" ].value.copy( hemisphereLight.color );
+    this.scene.fog.color.copy( uniforms[ "bottomColor" ].value );
+    const skyGeo = new THREE.SphereBufferGeometry( 4000, 32, 15 );
+    const skyMat = new THREE.ShaderMaterial( {
+      uniforms: uniforms,
+      vertexShader: vertexShader,
+      fragmentShader: fragmentShader,
+      side: THREE.BackSide
+    } );
+    const sky = new THREE.Mesh( skyGeo, skyMat );
+    this.scene.add( sky );
   }
 
   addPlane() {
-    // const material = new THREE.MeshToonMaterial({ color: 0x00ff00, side: THREE.DoubleSide });
-    // const geometry = new THREE.PlaneGeometry(this.renderer.domElement.clientWidth, 4);
-    // this.plane = new THREE.Mesh(geometry, material);
-
-    // this.plane.position.set(0, -8, 0);
-    // this.plane.rotation.x = Math.PI / 2;
-
-    // this.scene.add(this.plane);
-
     const geometry = new THREE.PlaneBufferGeometry(10000, 10000);
     const material = new THREE.MeshLambertMaterial({ color: 0xffffff });
     material.color.setHSL(0.095, 1, 0.75);
@@ -110,8 +149,8 @@ export default class MainCanvas {
       this.camera.updateProjectionMatrix();
     }
 
-    this.cube.rotation.x = time;
-    this.cube.rotation.y = time;
+    // this.cube.rotation.x = time;
+    // this.cube.rotation.y = time;
 
     // this.plane.rotation.y = time;
     // this.plane.rotation.x = time;
