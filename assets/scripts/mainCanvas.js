@@ -29,6 +29,8 @@ export default class MainCanvas {
   }
 
   createScene(canvas) {
+    this.clock = new THREE.Clock();
+
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color().setHSL(0.6, 0, 1);
     this.scene.fog = new THREE.Fog(this.scene.background, 1, 5000);
@@ -38,12 +40,16 @@ export default class MainCanvas {
     const near = 1;
     const far = 5000;
     this.camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-
-    this.renderer = new THREE.WebGLRenderer({canvas});
-    document.body.appendChild(this.renderer.domElement);
-    
     this.camera.position.set(0, 0, 250);
     this.camera.lookAt(0, 0, 0);
+
+    this.renderer = new THREE.WebGLRenderer({canvas, antialias: true});
+    document.body.appendChild(this.renderer.domElement);
+
+    this.renderer.gammaInput = true;
+    this.renderer.gammaOutput = true;
+
+    this.renderer.shadowMap.enabled = true;
   }
 
   addLight() {
@@ -57,6 +63,7 @@ export default class MainCanvas {
     this.scene.add(hemisphereLightHelper);
 
     const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    directionalLight.color.setHSL(0.1, 1, 0.95);
     directionalLight.position.set(-1, 1.75, 1);
     directionalLight.position.multiplyScalar(30);
     this.scene.add(directionalLight);
@@ -115,7 +122,7 @@ export default class MainCanvas {
 
   addModel() {
     const loader = new GLTFLoader();
-    const mixers = [];
+    this.mixers = [];
     loader.load('assets/models/gltf/Flamingo.glb', (gltf) => {
       const mesh = gltf.scene.children[0];
       const s = 0.35;
@@ -127,22 +134,31 @@ export default class MainCanvas {
       this.scene.add(mesh);
       const mixer = new THREE.AnimationMixer(mesh);
       mixer.clipAction(gltf.animations[0]).setDuration(1).play();
-      mixers.push(mixer);
+      this.mixers.push(mixer);
     });
   }
 
   animate(time) {
-    time *= 0.001;
-    
     if (this.resizeRendererToDisplaySize()) {
       const canvas = this.renderer.domElement;
       this.camera.aspect = canvas.clientWidth / canvas.clientHeight;
       this.camera.updateProjectionMatrix();
     }
 
-    this.renderer.render(this.scene, this.camera);
-    
+    // this.renderer.render(this.scene, this.camera);
+    this.render();
+
     requestAnimationFrame(this.animate.bind(this));
+  }
+
+  render() {
+    const delta = this.clock.getDelta();
+
+    for(let i = 0; i < this.mixers.length; i++) {
+      this.mixers[i].update(delta);
+    }
+
+    this.renderer.render(this.scene, this.camera);
   }
 
   resizeRendererToDisplaySize() {
