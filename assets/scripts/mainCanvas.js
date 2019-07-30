@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import GLTFLoader from 'three-gltf-loader';
 import WEBGL from './webGL';
 
 // https://www.pericror.com/software/creating-3d-objects-with-click-handlers-using-three-js/
@@ -10,15 +11,14 @@ import WEBGL from './webGL';
 export default class MainCanvas {
   constructor(canvas) {
     this.animate = this.animate.bind(this);
+    // this.addModel = this.addModel.bind(this);
     this.resizeRendererToDisplaySize = this.resizeRendererToDisplaySize.bind(this);
 
     if (WEBGL.isWebGLAvailable()) {
       this.createScene(canvas);
-      // this.addCube();
-      // this.addLine();
       this.addLight();
-      this.addPlane();
-      // this.addAxes();
+      this.addGround();
+      this.addModel();
 
       this.animate();
     } else {
@@ -44,27 +44,6 @@ export default class MainCanvas {
     
     this.camera.position.set(0, 0, 250);
     this.camera.lookAt(0, 0, 0);
-  }
-
-  addCube() {
-    const geometry = new THREE.BoxGeometry(1, 1, 1);
-    const material = new THREE.MeshToonMaterial({ color: 0x00ff00 });
-
-    this.cube = new THREE.Mesh(geometry, material);
-
-    this.scene.add(this.cube);
-  }
-
-  addLine() {
-    const material = new THREE.LineBasicMaterial({ color: 0x0000ff });
-    const geometry = new THREE.Geometry();
-    geometry.vertices.push(new THREE.Vector3(-10, 0, 0));
-    geometry.vertices.push(new THREE.Vector3(0, 10, 0));
-    geometry.vertices.push(new THREE.Vector3(10, 0, 0));
-
-    const line = new THREE.Line(geometry, material);
-
-    this.scene.add(line);
   }
 
   addLight() {
@@ -122,7 +101,7 @@ export default class MainCanvas {
     this.scene.add( sky );
   }
 
-  addPlane() {
+  addGround() {
     const geometry = new THREE.PlaneBufferGeometry(10000, 10000);
     const material = new THREE.MeshLambertMaterial({ color: 0xffffff });
     material.color.setHSL(0.095, 1, 0.75);
@@ -134,10 +113,22 @@ export default class MainCanvas {
     this.scene.add(ground);
   }
 
-  addAxes() {
-    const axesHelper = new THREE.AxesHelper(5);
-
-    this.scene.add(axesHelper);
+  addModel() {
+    const loader = new GLTFLoader();
+    const mixers = [];
+    loader.load('assets/models/gltf/Flamingo.glb', (gltf) => {
+      const mesh = gltf.scene.children[0];
+      const s = 0.35;
+      mesh.scale.set(s, s, s);
+      mesh.position.y = 15;
+      mesh.rotation.y = - 1;
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+      this.scene.add(mesh);
+      const mixer = new THREE.AnimationMixer(mesh);
+      mixer.clipAction(gltf.animations[0]).setDuration(1).play();
+      mixers.push(mixer);
+    });
   }
 
   animate(time) {
@@ -148,17 +139,6 @@ export default class MainCanvas {
       this.camera.aspect = canvas.clientWidth / canvas.clientHeight;
       this.camera.updateProjectionMatrix();
     }
-
-    // this.cube.rotation.x = time;
-    // this.cube.rotation.y = time;
-
-    // this.plane.rotation.y = time;
-    // this.plane.rotation.x = time;
-
-    // this.camera.position.set(0, -time, 15);
-
-    // this.sphere1.rotation.y = time;
-    // this.sphere1.rotation.x = time;
 
     this.renderer.render(this.scene, this.camera);
     
