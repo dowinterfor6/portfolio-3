@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import GLTFLoader from 'three-gltf-loader';
 import WEBGL from './webGL';
+import { Light } from 'three';
 
 // https://www.pericror.com/software/creating-3d-objects-with-click-handlers-using-three-js/
 // Click handler using raycasting
@@ -11,14 +12,16 @@ import WEBGL from './webGL';
 export default class MainCanvas {
   constructor(canvas) {
     this.animate = this.animate.bind(this);
-    // this.addModel = this.addModel.bind(this);
     this.resizeRendererToDisplaySize = this.resizeRendererToDisplaySize.bind(this);
 
     if (WEBGL.isWebGLAvailable()) {
+      this.dateObj = new Date();
       this.createScene(canvas);
       this.addLight();
       this.addGround();
       this.addModel();
+
+      this.addRenderer(canvas);
 
       this.animate();
     } else {
@@ -43,13 +46,11 @@ export default class MainCanvas {
     this.camera.position.set(0, 0, 250);
     this.camera.lookAt(0, 0, 0);
 
-    this.renderer = new THREE.WebGLRenderer({canvas, antialias: true});
-    document.body.appendChild(this.renderer.domElement);
+    // const cameraHelper = new THREE.CameraHelper(this.camera);
+    // this.scene.add(cameraHelper);
 
-    this.renderer.gammaInput = true;
-    this.renderer.gammaOutput = true;
-
-    this.renderer.shadowMap.enabled = true;
+    const axesHelper = new THREE.AxesHelper(50);
+    this.scene.add(axesHelper);
   }
 
   addLight() {
@@ -62,27 +63,36 @@ export default class MainCanvas {
     const hemisphereLightHelper = new THREE.HemisphereLightHelper(hemisphereLight, 10);
     this.scene.add(hemisphereLightHelper);
 
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-    directionalLight.color.setHSL(0.1, 1, 0.95);
-    directionalLight.position.set(-1, 1.75, 1);
-    directionalLight.position.multiplyScalar(30);
-    this.scene.add(directionalLight);
+    this.directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    this.directionalLight.color.setHSL(0.1, 1, 0.95);
+    // this.directionalLight.position.set(-1, 1.75, 1);
+    this.directionalLight.position.x = -10;
+    this.directionalLight.position.y = 10;
+    this.directionalLight.position.z = -1;
+    this.directionalLight.position.multiplyScalar(5);
 
-    directionalLight.castShadow = true;
-
-    directionalLight.shadow.mapSize.width = 2048;
-    directionalLight.shadow.mapSize.height = 2048;
-
+    
+    this.directionalLight.castShadow = true;
+    
+    this.directionalLight.shadow.mapSize.width = 2048;
+    this.directionalLight.shadow.mapSize.height = 2048;
+    
     const d = 50;
-    directionalLight.shadow.left = -d;
-    directionalLight.shadow.right = d;
-    directionalLight.shadow.top = d;
-    directionalLight.shadow.bottom = -d;
-
-    directionalLight.shadow.camera.far = 3500;
-    directionalLight.shadow.bias = -0.0001;
-
-    const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight, 10);
+    this.directionalLight.shadow.left = -d;
+    this.directionalLight.shadow.right = d;
+    this.directionalLight.shadow.top = d;
+    this.directionalLight.shadow.bottom = -d;
+    
+    const shadowCamera = new THREE.CameraHelper(this.directionalLight.shadow.camera);
+    this.scene.add(shadowCamera);
+    
+    this.directionalLight.shadow.camera.near = 0.5;
+    this.directionalLight.shadow.camera.far = 3500;
+    this.directionalLight.shadow.bias = -0.0001;
+    
+    this.scene.add(this.directionalLight);
+    
+    const directionalLightHelper = new THREE.DirectionalLightHelper(this.directionalLight, 10);
     this.scene.add(directionalLightHelper);
 
     // Sky
@@ -138,6 +148,16 @@ export default class MainCanvas {
     });
   }
 
+  addRenderer(canvas) {
+    this.renderer = new THREE.WebGLRenderer({canvas, antialias: true});
+    document.body.appendChild(this.renderer.domElement);
+
+    this.renderer.gammaInput = true;
+    this.renderer.gammaOutput = true;
+
+    this.renderer.shadowMap.enabled = true;
+  }
+
   animate(time) {
     if (this.resizeRendererToDisplaySize()) {
       const canvas = this.renderer.domElement;
@@ -157,6 +177,16 @@ export default class MainCanvas {
     for(let i = 0; i < this.mixers.length; i++) {
       this.mixers[i].update(delta);
     }
+
+    // const xPos = this.dateObj.getHours() + (this.dateObj.getMinutes() / 60);
+    // if (10*(xPos - 12) != this.directionalLight.position.x) {
+    //   this.directionalLight.position.x = 10*(xPos - 12);
+    //   this.directionalLight.position.y = 30*Math.cos((Math.PI/24) * this.directionalLight.position.x/10);
+    //   console.log("x: " + this.directionalLight.position.x);
+    //   console.log("y: " + this.directionalLight.position.y);
+    //   // this.directionalLight.lookAt(0, 0, 0);
+    //   this.directionalLight.target.position.set(0, 0, 0);
+    // };
 
     this.renderer.render(this.scene, this.camera);
   }
