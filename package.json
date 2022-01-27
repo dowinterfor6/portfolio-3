@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/dowinterfor6/portfolio-3#readme",
   "dependencies": {
-    "three": "^0.106.2",
+    "three": "^0.137.0",
     "three-gltf-loader": "^1.106.0",
     "webpack": "^4.31.0",
     "webpack-cli": "^3.3.2"
